@@ -1,0 +1,15 @@
+[library]
+include_dirs = defclass
+
+[script]
+shared_state = 1
+
+[input]
+game_binding = /example/example.input_bindingc
+
+[bootstrap]
+main_collection = /example/example.collectionc
+
+[project]
+title = defclass
+

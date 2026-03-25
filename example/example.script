@@ -1,0 +1,69 @@
+local defclass = require("defclass.class")
+
+---Fight til death
+---@param player Player
+---@param dragon Dragon
+local function fight(player, dragon)
+	while player.healthpoints > 0 and dragon.healthpoints > 0 do
+		print(("%s faces a  Draconic foe"):format(player.name))
+        player:attack(dragon)
+        dragon:attack(player)
+		print(("Dragon is at: %d hp"):format(dragon.healthpoints))
+		print(("%s is at: %d hp"):format(player.name,player.healthpoints))
+	end
+
+	if player.healthpoints <= 0 and dragon.healthpoints <= 0 then
+		print("Tie: both win by not being alive")
+	elseif player.healthpoints > dragon.healthpoints then
+		print(("%s won!"):format(player.name))
+	else
+		print(("Dragon is using %s sword's as toothpick."):format(player.name))
+	end
+end
+
+function init(self)
+	---@class Player
+	local Player = defclass.Class({ healthpoints = 10 })
+	function Player.new(name)
+		---@class Player
+		local player_data = {
+			name = name,
+			healthpoints = Player.healthpoints,
+			hitpoints = 10,
+		}
+		local p = setmetatable(player_data, Player)
+
+		print("~* and there was light *~")
+		print(("~ %s is born ~"):format(name))
+		print(("Health is at: %d"):format(p.healthpoints))
+		print("Being instantiated sucks.")
+		print("~ -1 hp ~")
+		p.healthpoints = p.healthpoints - 1
+		print(("Health is at: %d"):format(p.healthpoints))
+		return p
+	end
+
+    function Player:attack(attackee)
+        attackee.healthpoints = attackee.healthpoints - self.hitpoints
+    end
+
+
+	local protagonist = Player("Dovahkiin")
+
+	---@class Dragon
+	local Dragon = defclass.Class({})
+	function Dragon.new(healthpoints, hitpoints)
+		---@class Dragon
+		local dragon_data = { healthpoints = healthpoints, hitpoints = hitpoints }
+        return defclass.NewInstance(Dragon, dragon_data) -- equivalent to setmetatable(T, obj)
+	end
+
+    function Dragon:attack(attackee)
+        attackee.healthpoints = attackee.healthpoints - self.hitpoints
+    end
+
+
+	local badguy = Dragon(100, 5)
+
+	fight(protagonist, badguy)
+end
